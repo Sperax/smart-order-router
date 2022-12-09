@@ -275,8 +275,6 @@ export type ProtocolPoolSelection = {
    * this set to the top 2 pools from that full list.
    */
   topNWithBaseToken: number;
-
-  enforceBaseTokens?: Token[];
 };
 
 export type AlphaRouterConfig = {
@@ -335,8 +333,8 @@ export type AlphaRouterConfig = {
 
 export class AlphaRouter
   implements
-  IRouter<AlphaRouterConfig>,
-  ISwapToRatio<AlphaRouterConfig, SwapAndAddConfig>
+    IRouter<AlphaRouterConfig>,
+    ISwapToRatio<AlphaRouterConfig, SwapAndAddConfig>
 {
   protected chainId: ChainId;
   protected provider: BaseProvider;
@@ -585,10 +583,10 @@ export class AlphaRouter
         chainId,
         this.provider instanceof JsonRpcProvider
           ? new OnChainGasPriceProvider(
-            chainId,
-            new EIP1559GasPriceProvider(this.provider),
-            new LegacyGasPriceProvider(this.provider)
-          )
+              chainId,
+              new EIP1559GasPriceProvider(this.provider),
+              new LegacyGasPriceProvider(this.provider)
+            )
           : new ETHGasStationInfoProvider(ETH_GAS_STATION_API_URL),
         new NodeJSCache<GasPrice>(
           new NodeCache({ stdTTL: 15, useClones: false })
@@ -1173,7 +1171,8 @@ export class AlphaRouter
 
       if (token0Invalid || token1Invalid) {
         log.info(
-          `Dropping pool ${poolToString(pool)} because token is invalid. ${pool.token0.symbol
+          `Dropping pool ${poolToString(pool)} because token is invalid. ${
+            pool.token0.symbol
           }: ${token0Validation}, ${pool.token1.symbol}: ${token1Validation}`
         );
       }
@@ -1262,11 +1261,11 @@ export class AlphaRouter
     const quoteFn =
       swapType == TradeType.EXACT_INPUT
         ? this.onChainQuoteProvider.getQuotesManyExactIn.bind(
-          this.onChainQuoteProvider
-        )
+            this.onChainQuoteProvider
+          )
         : this.onChainQuoteProvider.getQuotesManyExactOut.bind(
-          this.onChainQuoteProvider
-        );
+            this.onChainQuoteProvider
+          );
 
     const beforeQuotes = Date.now();
     log.info(
